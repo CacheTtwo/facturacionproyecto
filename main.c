@@ -77,7 +77,7 @@ void albaranes(int numarticulo, int cantidad) {
         fflush(stdin);
         fgets(l_albaranes[i].descripcion, 10, stdin);
     printf("Articulo %d:\n", i++);
-    scanf("%s", l_albaranes[i].tipoarticulo);
+    scanf("%d", &l_albaranes[i].tipoarticulo);
 
     printf("Cantidad:\n");
     scanf("%d", &l_albaranes[i].cantidad);
