@@ -18,12 +18,11 @@ list l_items[LISTA];
 
 typedef struct
 {
-
     int cantidad;
     float precio;
     int tipoarticulo[5];
-}l;
-l l_albaranes[LISTA];
+}art;
+art l_albaranes[LISTA];
 
 int main() {
     int ops;
