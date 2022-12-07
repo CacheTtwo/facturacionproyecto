@@ -18,10 +18,10 @@ list l_items[LISTA];
 
 typedef struct
 {
-    int descripcion;
+
     int cantidad;
     float precio;
-    int tipoarticulo;
+    int tipoarticulo[5];
 }l;
 l l_albaranes[LISTA];
 
@@ -74,10 +74,8 @@ void albaranes(int numarticulo, int cantidad) {
     printf("Introduzca el numero de articulos que tiene el albaran:");
     scanf("%d", &p);
     do {
-        fflush(stdin);
-        fgets(l_albaranes[i].descripcion, 10, stdin);
     printf("Articulo %d:\n", i++);
-    scanf("%d", &l_albaranes[i].tipoarticulo);
+    scanf("%d", &l_albaranes[i].tipoarticulo, 5, stdin);
 
     printf("Cantidad:\n");
     scanf("%d", &l_albaranes[i].cantidad);
