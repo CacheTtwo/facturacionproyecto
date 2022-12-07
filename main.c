@@ -2,6 +2,7 @@
 #define LISTA 15
 
 
+
 void albaranes(int numarticulo, int cantidad);
 //void factura(int identificador, int cantidad, float precio, float importe); //No se si esta deberia de ser int ya que dice que se pondra a 0 despues de visualizar miradlo pls
 void nuevoarticulo(void);
@@ -22,7 +23,7 @@ typedef struct
     float precio;
     int tipoarticulo[5];
 }art;
-art l_albaranes[LISTA];
+art art_albaranes[LISTA];
 
 int main() {
     int ops;
@@ -74,10 +75,10 @@ void albaranes(int numarticulo, int cantidad) {
     scanf("%d", &p);
     do {
     printf("Articulo %d:\n", i++);
-    scanf("%d", &l_albaranes[i].tipoarticulo, 5, stdin);
+    scanf("%d", &art_albaranes[i].tipoarticulo);
 
     printf("Cantidad:\n");
-    scanf("%d", &l_albaranes[i].cantidad);
+    scanf("%d", &art_albaranes[i].cantidad);
 
     } while(i <= p);
 }
@@ -104,4 +105,4 @@ void nuevoarticulo(void)
             printf("No hay espacio disponible maldito cabron");
 
     }
-}
+
