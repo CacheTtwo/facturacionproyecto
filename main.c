@@ -15,6 +15,7 @@ int main() {
     int ops;
     do {
         printf("\n1. Introduccion de albaran\n");
+                albaranes(numarticulo, cantidad);
         printf("2. Confeccion de factura\n");
         printf("3. Introduccion de nuevo articulo\n");
         printf("4. Salir del programa\n");
