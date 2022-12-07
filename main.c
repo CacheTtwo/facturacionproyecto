@@ -42,6 +42,23 @@ int main() {
 
     return 0;
 }
+void albaranes(int numarticulo, int cantidad) {
+    int i=1, p ;
+    printf("Cuantos albaranes quieres hacer:\n");
+    scanf("%d", &p);
+    do {
+
+        printf("Albaran %d\n", i++);
+
+            printf("Num\n");
+            scanf("%d", &numarticulo);
+            printf("Cant\n");
+            scanf("%d", &cantidad);
+
+
+
+    }while(i<=p);
+}
 void nuevoarticulo(void)
 {
     int i, j;
