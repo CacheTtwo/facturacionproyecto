@@ -1,8 +1,10 @@
 #include <stdio.h>
 #define LISTA 15
+
 void albaranes(int numarticulo, int cantidad);
-void factura(int identificador, int cantidad, float precio, float importe); //No se si esta deberia de ser int ya que dice que se pondra a 0 despues de visualizar miradlo pls
-void nuevoarticulo(void); //Tampoco se si la variable descripcion esta bien definida asi, habra que utilizar un getch o algo asi
+//void factura(int identificador, int cantidad, float precio, float importe); //No se si esta deberia de ser int ya que dice que se pondra a 0 despues de visualizar miradlo pls
+void nuevoarticulo(void);
+
 typedef struct
 {
     char descripcion[150];
@@ -11,8 +13,10 @@ typedef struct
     int lleno;
 }list;
 list l_items[LISTA];
+
 int main() {
     int ops;
+    int numarticulo, cantidad;
     do {
         printf("\n1. Introduccion de albaran\n");
         printf("2. Confeccion de factura\n");
@@ -28,6 +32,14 @@ int main() {
                 break;
             case 2:
                 printf("2. Confeccion de factura\n");
+                printf("----------------------------------------------------------------\n");
+                printf("\t\tFactura -- Ferreteria Albacete --\n");
+                printf("----------------------------------------------------------------\n");
+                printf("\t Numero del articulo \t Cantidad \t Precio  Importe\n");
+                printf("\t                  13 \t        6 \t   2.90    17.40\n");
+                printf("----------------------------------------------------------------\n");
+                printf("\t                                         TOTAL:  304.15\n");
+                printf("----------------------------------------------------------------\n");
                 break;
             case 3:
                 printf("3. Introduccion de nuevo articulo\n");
@@ -43,23 +55,21 @@ int main() {
 
     return 0;
 }
+
 void albaranes(int numarticulo, int cantidad) {
-    int i=1, p ;
-    printf("Cuantos albaranes quieres hacer:\n");
+    int i = 1, p;
+
+    printf("Albaran %d\n", i);
+    printf("Introduzca el numero de articulos que tiene el albaran:");
     scanf("%d", &p);
     do {
-
-        printf("Albaran %d\n", i++);
-
-            printf("Num\n");
-            scanf("%d", &numarticulo);
-            printf("Cant\n");
-            scanf("%d", &cantidad);
-
-
-
-    }while(i<=p);
+    printf("Articulo %d:\n", i++);
+    scanf("%d", &numarticulo);
+    printf("Cantidad:\n");
+    scanf("%d", &cantidad);
+    } while(i <= p);
 }
+
 void nuevoarticulo(void)
 {
     int i, j;
