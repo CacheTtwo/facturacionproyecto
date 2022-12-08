@@ -1,33 +1,22 @@
 #include <stdio.h>
+#include <string.h>
 #define LISTA 15
-
-
-
+#define MAX_DESC 150
 void albaranes(int numarticulo, int cantidad);
-//void factura(int identificador, int cantidad, float precio, float importe); //No se si esta deberia de ser int ya que dice que se pondra a 0 despues de visualizar miradlo pls
-void nuevoarticulo(void);
-
+void factura(int identificador, int cantidad, float precio, float importe); //No se si esta deberia de ser int ya que dice que se pondra a 0 despues de visualizar miradlo pls
 typedef struct
 {
-    char descripcion[150];
+    char descripcion[MAX_DESC];
     int cantidad;
     float precio;
     int lleno;
-
 }list;
 list l_items[LISTA];
-
-typedef struct
-{
-    int cantidad;
-    float precio;
-    int tipoarticulo[5];
-}art;
-art art_albaranes[LISTA];
-
+void nuevoarticulo(); //Tampoco se si la variable descripcion esta bien definida asi, habra que utilizar un getch o algo asi
+void listalimpia();
 int main() {
     int ops;
-    int numarticulo, cantidad;
+    listalimpia();
     do {
         printf("\n1. Introduccion de albaran\n");
         printf("2. Confeccion de factura\n");
@@ -39,7 +28,6 @@ int main() {
         switch(ops) {
             case 1:
                 printf("1. Introduccion de albaran\n");
-                albaranes(numarticulo, cantidad);
                 break;
             case 2:
                 printf("2. Confeccion de factura\n");
@@ -53,8 +41,14 @@ int main() {
                 printf("----------------------------------------------------------------\n");
                 break;
             case 3:
-                printf("3. Introduccion de nuevo articulo\n");
+
                 nuevoarticulo();
+                for(int i=0;i<LISTA;i++) {
+                    printf("%s\n", l_items[i].descripcion);
+                    printf("%d\n", l_items[i].cantidad);
+                    printf("%.2f\n", l_items[i].precio);
+                    printf("%d\n", l_items[i].lleno);
+                }
                 break;
             case 4:
                 printf("4. Salir del programa\n");
@@ -66,43 +60,34 @@ int main() {
 
     return 0;
 }
-
-void albaranes(int numarticulo, int cantidad) {
-    int i = 1, p;
-
-    printf("Albaran %d\n", i);
-    printf("Introduzca el numero de articulos que tiene el albaran:");
-    scanf("%d", &p);
-    do {
-    printf("Articulo %d:\n", i++);
-    scanf("%d", &art_albaranes[i].tipoarticulo);
-
-    printf("Cantidad:\n");
-    scanf("%d", &art_albaranes[i].cantidad);
-
-    } while(i <= p);
-}
-
-void nuevoarticulo(void)
+void nuevoarticulo()
 {
-    int i, j;
+    int i;
+    int aux=0;
     printf("Introduzca el nuevo articulo:\n");
-    for(i=0;i<LISTA ;i++)
+    for(i=0;i<LISTA && aux==0;i++)
     {
-        if(l_items[i].lleno==0)
-        {
+        if(l_items[i].lleno==0) {
             printf("Introduce los datos requeridos:\n Descripcion:");
             fflush(stdin);
-            fgets(l_items[i].descripcion,150,stdin);
-            //
+            fgets(l_items[i].descripcion, MAX_DESC, stdin);
+            fflush(stdin);
             printf("cantidad:\n ");
-            scanf("%d",&l_items[i].cantidad);
+            scanf("%d", &l_items[i].cantidad);
             printf("Precio:\n ");
             scanf("%f",&l_items[i].precio);
             l_items[i].lleno=1;
             break;
         }else if (l_items[LISTA-1].lleno==1)
-            printf("No hay espacio disponible maldito cabron");
+            printf("No hay espacio disponible");
+
 
     }
-
+}
+void listalimpia()
+{
+    for (int i = 0; i <LISTA ; ++i)
+    {
+        l_items[i].lleno=0;
+    }
+}
