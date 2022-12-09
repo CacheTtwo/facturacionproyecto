@@ -1,20 +1,33 @@
 #include <stdio.h>
 #include <string.h>
+#define LISTA 15
+#define MAX_DESC 150
+
+void albaranes(int numarticulo, int cantidad);
+void factura(struct productos listaproductos[15], int *numalbaranes);
+void nuevoarticulo();
+void listalimpia();
 
 struct productos{
-    int identificador;
-    char descripcion [200];
-    double price;
+    int numarticulo;
+    char descripcion[150];
+    float precio;
     int stock;
 };
 
-//PROTOTIPOS//
-void albaranes(int numarticulo, int cantidad);
-void factura(struct productos producto[15], struct productos DatosdelProducto[15], int *NumerodePedidos); //No se si esta deberia de ser int ya que dice que se pondra a 0 despues de visualizar miradlo pls
-void nuevoarticulo(void); //Tampoco se si la variable descripcion esta bien definida asi, habra que utilizar un getch o algo asi
+typedef struct {
+    char descripcion[150];
+    int cantidad;
+    float precio;
+    int lleno;
+}list;
+list l_items[LISTA];
 
 int main() {
-    int ops;
+    int ops, numalbaranes = 5;
+    struct productos listaproductos[15] = {{1, "Martillo de carpintero con mango de fibra de vidrio", 4.88, 50}, {2, "Maza de goma", 8.22, 4}, {3, "Juego de llaves combinadas", 11.99, 10}, {4, "Llave inglesa ajustable con tornillo", 5.54, 12}, {5, "Juego de laves Allen", 6.95, 20}, {6, "Juego de llaves de vaso", 21.99, 10}, {7, "Juego de destornilladores de precisión", 18.46, 15}, {8, "Pinza pelacables", 5.99, 3}, {9, "Alicates universales", 5.63, 12}, {10, "Polimetro digital de bolsillo", 18.3, 7}, {11, "Polimetro digital multifuncion", 32.00, 12}};
+    listalimpia();
+
     do {
         printf("\n1. Introduccion de albaran\n");
         printf("2. Confeccion de factura\n");
@@ -29,10 +42,17 @@ int main() {
                 break;
             case 2:
                 printf("2. Confeccion de factura\n");
+                factura(listaproductos, &numalbaranes);
                 break;
             case 3:
                 printf("3. Introduccion de nuevo articulo\n");
                 nuevoarticulo();
+                for(int i=0;i<LISTA;i++) {
+                    printf("%s\n", l_items[i].descripcion);
+                    printf("%d\n", l_items[i].cantidad);
+                    printf("%.2f\n", l_items[i].precio);
+                    printf("%d\n", l_items[i].lleno);
+                }
                 break;
             case 4:
                 printf("4. Salir del programa\n");
@@ -41,71 +61,49 @@ int main() {
                 printf("La opcion no es valida\n");
         }
     } while(ops != 4);
-
     return 0;
 }
-void albaranes(int numarticulos, int cantidad) {
-    int p;
 
+void albaranes(int numarticulo, int cantidad) {
+    int i = 1, p;
 
-
-    printf("Introduzca el numero de articulos que tiene el albaran:\n");
+    printf("Albaran %d\n", i);
+    printf("Introduzca el numero de articulos que tiene el albaran:");
     scanf("%d", &p);
-    int identificador[p];
-    int cantidades[p];
-    if ((p >= 1) && (p <= 5)) {
-        for (int i = 0; i < p; ++i) {
-            do {
-                printf("Articulo %d:\n", i);
-
-                scanf("%d", &identificador[i]);
-
-                printf("Cantidad:\n");
-                scanf("%d", &cantidades[i]);
-
-
-            } while ((identificador[i] < 1) || (identificador[i] > 15) || (cantidades[i] <= 0));
-            for (int j = 0; j < i; ++j) {
-                if (identificador[i] == identificador[j]) {
-                    printf("El articulo pedido ya se añadio. No se añadio nada de la peticion anterior!\n");
-                    i--;
-                }
-            }
-        }
-    }else printf("No se admiten mas de 5 articulos\n");
+    do {
+    printf("Articulo %d:\n", i++);
+    scanf("%d", &numarticulo);
+    printf("Cantidad:\n");
+    scanf("%d", &cantidad);
+    } while(i <= p);
 }
-void factura(struct productos producto[15], struct productos DatosdelProducto[15], int *NumerodePedidos) {
 
-    int CantidadObjetos, Nopedido = 0;
-    int LimiteDescripcion; //Usado para mostrar la tabla a la izquierda de la pantalla
-    double CantidadTotal = 0;
+void factura(struct productos listaproductos[15], int *numalbaranes) {
+    
+}
 
-    printf("\n\t-= OPCION 2 | RECIBO DE LA FACTURA =-\n\n");
-
-    for (int i = 0; i < 15; ++i) {
-        if (producto[i].stock == DatosdelProducto[i].stock) Nopedido++; //Comprueba que ningun pedido se ha realizado y muestra un mensaje de error
+void nuevoarticulo() {
+    int i, aux=0;
+    printf("Introduzca el nuevo articulo:\n");
+    for(i=0; i<LISTA && aux==0; i++) {
+        if(l_items[i].lleno==0) {
+            printf("Introduce los datos requeridos:\n Descripcion:");
+            fflush(stdin);
+            fgets(l_items[i].descripcion, MAX_DESC, stdin);
+            fflush(stdin);
+            printf("cantidad:\n ");
+            scanf("%d", &l_items[i].cantidad);
+            printf("Precio:\n ");
+            scanf("%f", &l_items[i].precio);
+            l_items[i].lleno = 1;
+            break;
+        } else if (l_items[LISTA-1].lleno == 1)
+            printf("No hay espacio disponible");
     }
-    if (Nopedido == 15) {
-        printf("No has pedido nada.\nPara ello, selecciona la Opcion 1.\n\n");
-        return;
-    }
+}
 
-    for (int i = 0; i < 15; ++i) { //Busca la descripcion maxima para poner la tabla
-        if (producto[i].stock != DatosdelProducto[i].stock)
-            if (strlen(producto[i].descripcion) > LimiteDescripcion)
-                LimiteDescripcion = strlen(producto[i].descripcion); //Establece la longitud maxima
+void listalimpia() {
+    for (int i = 0; i <LISTA; ++i) {
+        l_items[i].lleno = 0;
     }
-    printf("%*s  %10s  %10s  %10s\n", LimiteDescripcion, "DESCRIPCION", "CANTIDAD", "PRECIO", "IMPORTE"); //MOSTRAR LA TABLA CON LOS OBJETOS PEDIDOS
-    for (int i = 0; i < 15; ++i) {
-        if (producto[i].stock != DatosdelProducto[i].stock) { //Imprime los objetos pedidos mientras que el stock no se haya acabado
-            CantidadObjetos = DatosdelProducto[i].stock - producto[i].stock; //Calcula la cantidad de objetos basado en la diferencia entre el stock inicial y el actual
-            printf("%*s  %10d  %10.2f  %10.2f\n", LimiteDescripcion, producto[i].descripcion, CantidadObjetos, producto[i].price, producto[i].price * CantidadTotal);
-            CantidadTotal += CantidadObjetos * producto[i].price; //Calcula el importe total para todos los objetos
-            DatosdelProducto[i].stock = producto[i].stock; //Actualiza los datos del stock inicial para siguientes facturas;
-        }
-    }
-    printf("\n-> TOTAL: %.2f\n\n\n", CantidadTotal); //Imprime el importe total para todos los objetos
-
-    //RESET
-    *NumerodePedidos = 5; //Establece a 0 el numero de pedidos para permitir al usuario pedir nuevos pedidos otra vez
 }
