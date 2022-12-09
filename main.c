@@ -64,18 +64,35 @@ int main() {
     return 0;
 }
 
-void albaranes(int numarticulo, int cantidad) {
-    int i = 1, p;
+void albaranes(int numarticulos, int cantidad) {
+    int p;
 
-    printf("Albaran %d\n", i);
-    printf("Introduzca el numero de articulos que tiene el albaran:");
+
+
+    printf("Introduzca el numero de articulos que tiene el albaran:\n");
     scanf("%d", &p);
-    do {
-    printf("Articulo %d:\n", i++);
-    scanf("%d", &numarticulo);
-    printf("Cantidad:\n");
-    scanf("%d", &cantidad);
-    } while(i <= p);
+    int identificador[p];
+    int cantidades[p];
+    if ((p >= 1) && (p <= 5)) {
+        for (int i = 0; i < p; ++i) {
+            do {
+                printf("Articulo %d:\n", i);
+
+                scanf("%d", &identificador[i]);
+
+                printf("Cantidad:\n");
+                scanf("%d", &cantidades[i]);
+
+
+            } while ((identificador[i] < 1) || (identificador[i] > 15) || (cantidades[i] <= 0));
+            for (int j = 0; j < i; ++j) {
+                if (identificador[i] == identificador[j]) {
+                    printf("El articulo pedido ya se añadio. No se añadio nada de la peticion anterior!\n");
+                    i--;
+                }
+            }
+        }
+    }else printf("No se admiten mas de 5 articulos\n");
 }
 
 void factura(struct productos listaproductos[15], int *numalbaranes) {
