@@ -10,10 +10,10 @@ struct productos{
     int stock;
     int lleno;
 };
-
 void albaranes(struct productos listaproductos[15]);
 void factura(struct productos listaproductos[15], struct productos productosiniciales[15], int *numalbaranes);
 void new_art(struct productos lista[LISTA]);
+void cambio(char palabra[MAX_DESC]);
 
 int main() {
     int ops, numalbaranes = 5;
@@ -21,6 +21,7 @@ int main() {
     struct productos listaproductos[15] = {{1, "Martillo de carpintero con mango de fibra de vidrio", 4.88, 50,1}, {2, "Maza de goma", 8.22, 4,1}, {3, "Juego de llaves combinadas", 11.99, 10,1}, {4, "Llave inglesa ajustable con tornillo", 5.54, 12,1}, {5, "Juego de laves Allen", 6.95, 20,1}, {6, "Juego de llaves de vaso", 21.99, 10,1}, {7, "Juego de destornilladores de precisión", 18.46, 15,1}, {8, "Pinza pelacables", 5.99, 3,1}, {9, "Alicates universales", 5.63, 12,1},{10, "Polimetro digital de bolsillo", 18.3, 7,1}, {11, "Polimetro digital multifuncion", 32.00, 12,1}};
     //Copia de la lista que utilizamos para realizar ciertas comprobaciones en la funcion 2
     struct productos productosiniciales[15] = {{1, "Martillo de carpintero con mango de fibra de vidrio", 4.88, 50,1}, {2, "Maza de goma", 8.22, 4,1}, {3, "Juego de llaves combinadas", 11.99, 10,1}, {4, "Llave inglesa ajustable con tornillo", 5.54, 12,1}, {5, "Juego de laves Allen", 6.95, 20,1}, {6, "Juego de llaves de vaso", 21.99, 10,1}, {7, "Juego de destornilladores de precisión", 18.46, 15,1}, {8, "Pinza pelacables", 5.99, 3,1}, {9, "Alicates universales", 5.63, 12,1}, {10, "Polimetro digital de bolsillo", 18.3, 7,1}, {11, "Polimetro digital multifuncion", 32.00, 12,1}};
+
 
     do {
         printf("\n1. Introduccion de albaran\n");
@@ -129,24 +130,45 @@ void factura(struct productos listaproductos[15], struct productos produtosinici
     *numalbaranes = 5;
 }
 
-void new_art(struct productos lista[LISTA])
+void new_art(struct productos lista[LISTA]) //La estructura para la funcion es simple, se usa
+        // un guardado de datos a través de un for, ya que es la forma de guardar datos en
+        // una matriz o vector, recordar que para matrices se utilizan dos, la estructura ayuda, pues
+        // escribir cuatro o cinco vectores para recopilar los datos habrían hecho de este proyecto uno mucho
+        // mas extenso y dificil de compilar, pues el programa tendria que acceder a puntos distintos y no relacionados
+        // de la memoria. Tambien cabe mencionar que el sistema de recoleccion de la variable lleno y el numero de
+        // descripcion son simplemente beneficios de usar un loop 'for', y que siempre tengan en cuenta que los vectores
+        // y matrices empiezan en 0, por tanto para que tanto las variables de llenado como los n_art sean correctos
+        // hay que escribir el i+1 numero que se busque guardar.
 {
     int i, aux=0;
-    printf("Introduzca el nuevo articulo.\n");
+    printf("Introduzca el nuevo articulo:\n");
     for(i=0; i<LISTA && aux==0; i++) {
         if(lista[i].lleno==0) {
             printf("Introduce los datos requeridos:\n Descripcion:");
             fflush(stdin);
             fgets(lista[i].descripcion, MAX_DESC, stdin);
+            cambio(lista[i].descripcion);
             fflush(stdin);
-            printf("Cantidad:\n ");
+            printf("Stock:\n ");
             scanf("%d", &lista[i].stock);
             printf("Precio:\n ");
             scanf("%f", &lista[i].precio);
             lista[i].numarticulo=i+1;
             lista[i].lleno = 1;
             break;
-        } else if (lista[LISTA-1].lleno == 1)
-            printf("No hay espacio disponible");
+        } else if (lista[14].lleno == 1)
+        {
+            printf("No hay espacio disponible\n");
+            break;
+        }
+
+    }
+}
+void cambio(char palabra[MAX_DESC]) //Una simple funcion que busque, usando un for, por el caracter '\n' en lo escrito,
+// tampoco hay mucho que explicar xd
+{
+    for (int i = 0; i < MAX_DESC; ++i) {
+        if(palabra[i]=='\n')
+            palabra[i]='\0';
     }
 }
