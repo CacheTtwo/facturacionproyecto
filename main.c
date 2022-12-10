@@ -17,7 +17,9 @@ void new_art(struct productos lista[LISTA]);
 
 int main() {
     int ops, numalbaranes = 5;
+    //Lista de productos
     struct productos listaproductos[15] = {{1, "Martillo de carpintero con mango de fibra de vidrio", 4.88, 50,1}, {2, "Maza de goma", 8.22, 4,1}, {3, "Juego de llaves combinadas", 11.99, 10,1}, {4, "Llave inglesa ajustable con tornillo", 5.54, 12,1}, {5, "Juego de laves Allen", 6.95, 20,1}, {6, "Juego de llaves de vaso", 21.99, 10,1}, {7, "Juego de destornilladores de precisión", 18.46, 15,1}, {8, "Pinza pelacables", 5.99, 3,1}, {9, "Alicates universales", 5.63, 12,1},{10, "Polimetro digital de bolsillo", 18.3, 7,1}, {11, "Polimetro digital multifuncion", 32.00, 12,1}};
+    //Copia de la lista que utilizamos para realizar ciertas comprobaciones en la funcion 2
     struct productos productosiniciales[15] = {{1, "Martillo de carpintero con mango de fibra de vidrio", 4.88, 50,1}, {2, "Maza de goma", 8.22, 4,1}, {3, "Juego de llaves combinadas", 11.99, 10,1}, {4, "Llave inglesa ajustable con tornillo", 5.54, 12,1}, {5, "Juego de laves Allen", 6.95, 20,1}, {6, "Juego de llaves de vaso", 21.99, 10,1}, {7, "Juego de destornilladores de precisión", 18.46, 15,1}, {8, "Pinza pelacables", 5.99, 3,1}, {9, "Alicates universales", 5.63, 12,1}, {10, "Polimetro digital de bolsillo", 18.3, 7,1}, {11, "Polimetro digital multifuncion", 32.00, 12,1}};
 
     do {
@@ -33,7 +35,7 @@ int main() {
                 printf("1. Introduccion de albaran\n");
                 if (numalbaranes > 0) {
                     albaranes(listaproductos);
-                    numalbaranes--;
+                    numalbaranes--; //Reduce en 1 (inicialmente vale 5) el numero de albaranes que podemos crear cada vez que vamos a la opcion 1
                 } else printf("\nYa pediste 5 albaranes, no se admiten mas.\n\n");
                 break;
             case 2:
@@ -67,7 +69,7 @@ void albaranes(struct productos listaproductos[15]) {
     printf("Introduzca el numero de articulos que tiene el albaran:\n");
     scanf("%d", &p);
     int numarticulo[p];
-    int cantidad[p];
+    int cantidad[p]; //Listas que contienen el numero del articulo y su cantidad
 
     for (int i = 0; i < p; ++i) {
         do {
@@ -76,20 +78,20 @@ void albaranes(struct productos listaproductos[15]) {
             printf("Cantidad:\n");
             scanf("%d", &cantidad[i]);
             if((numarticulo[i] < 1) || (numarticulo[i] > 15) || (cantidad[i] <= 0)) printf("Ese articulo no existe o la cantidad es negativa, vuelva a introducir los datos.\n");
-        } while ((numarticulo[i] < 1) || (numarticulo[i] > 15) || (cantidad[i] <= 0));
+        } while ((numarticulo[i] < 1) || (numarticulo[i] > 15) || (cantidad[i] <= 0)); //Si el articulo introducido no es valido por alguna de estas razones se vuelven a pedir los datos de este
         for (int j = 0; j < i; ++j) {
             if (numarticulo[i] == numarticulo[j]) {
                 printf("Ese articulo ya esta en este albaran, no se puede repetir.\n");
                 i--;
-            }
+            } //Este if comprueba que cada articulo que pedimos no ha sido pedido ya anteriormente
         }
     }
 
     for (int i = 0; i < p; ++i) {
         for (int j = 0; j < 15; ++j) {
-            if (numarticulo[i] == listaproductos[j].numarticulo) {
-                if (cantidad[i] > listaproductos[j].stock) cantidad[i] = listaproductos[j].stock;
-                listaproductos[j].stock -= cantidad[i];
+            if (numarticulo[i] == listaproductos[j].numarticulo) { //Buscamos el producto pedido en la lista de articulos
+                if (cantidad[i] > listaproductos[j].stock) cantidad[i] = listaproductos[j].stock; //Si la cantidad pedida es mayor que el stock solo damos el stock que haya
+                listaproductos[j].stock -= cantidad[i]; //Reducimos el stock del articulo segun la cantidad pedida
             }
         }
     }
@@ -105,7 +107,7 @@ void factura(struct productos listaproductos[15], struct productos produtosinici
     if (sin_pedidos == 15) {
         printf("No hay albaranes. Para mostrar la factura introduce uno primero.\n");
         return;
-    }
+    } //Mediante el for y el if comprobamos si todavia no se ha introducido ningun albaran, en ese caso pedimos que se introduzca uno antes de mostrar una factura
 
     printf("----------------------------------------------------------------\n");
     printf("\t\tFactura -- Ferreteria Albacete --\n");
