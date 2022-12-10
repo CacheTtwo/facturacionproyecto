@@ -13,24 +13,12 @@ struct productos{
 
 void albaranes(struct productos listaproductos[15]);
 void factura(struct productos listaproductos[15], struct productos productosiniciales[15], int *numalbaranes);
-void nuevoarticulo();
-void listalimpia();
 void new_art(struct productos lista[LISTA]);
-
-typedef struct {
-    char descripcion[150];
-    int cantidad;
-    float precio;
-    int lleno;
-}list;
-list l_items[LISTA];
 
 int main() {
     int ops, numalbaranes = 5;
-    struct productos listaproductos[15] = {{1, "Martillo de carpintero con mango de fibra de vidrio", 4.88, 50,1}, {2, "Maza de goma", 8.22, 4,1}, {3, "Juego de llaves combinadas", 11.99, 10,1}, {4, "Llave inglesa ajustable con tornillo", 5.54, 12,1},
-            {5, "Juego de laves Allen", 6.95, 20,1}, {6, "Juego de llaves de vaso", 21.99, 10,1}, {7, "Juego de destornilladores de precisión", 18.46, 15,1}, {8, "Pinza pelacables", 5.99, 3,1}, {9, "Alicates universales", 5.63, 12,1},{10, "Polimetro digital de bolsillo", 18.3, 7,1}, {11, "Polimetro digital multifuncion", 32.00, 12,1}};
+    struct productos listaproductos[15] = {{1, "Martillo de carpintero con mango de fibra de vidrio", 4.88, 50,1}, {2, "Maza de goma", 8.22, 4,1}, {3, "Juego de llaves combinadas", 11.99, 10,1}, {4, "Llave inglesa ajustable con tornillo", 5.54, 12,1}, {5, "Juego de laves Allen", 6.95, 20,1}, {6, "Juego de llaves de vaso", 21.99, 10,1}, {7, "Juego de destornilladores de precisión", 18.46, 15,1}, {8, "Pinza pelacables", 5.99, 3,1}, {9, "Alicates universales", 5.63, 12,1},{10, "Polimetro digital de bolsillo", 18.3, 7,1}, {11, "Polimetro digital multifuncion", 32.00, 12,1}};
     struct productos productosiniciales[15] = {{1, "Martillo de carpintero con mango de fibra de vidrio", 4.88, 50,1}, {2, "Maza de goma", 8.22, 4,1}, {3, "Juego de llaves combinadas", 11.99, 10,1}, {4, "Llave inglesa ajustable con tornillo", 5.54, 12,1}, {5, "Juego de laves Allen", 6.95, 20,1}, {6, "Juego de llaves de vaso", 21.99, 10,1}, {7, "Juego de destornilladores de precisión", 18.46, 15,1}, {8, "Pinza pelacables", 5.99, 3,1}, {9, "Alicates universales", 5.63, 12,1}, {10, "Polimetro digital de bolsillo", 18.3, 7,1}, {11, "Polimetro digital multifuncion", 32.00, 12,1}};
-    listalimpia();
 
     do {
         printf("\n1. Introduccion de albaran\n");
@@ -59,7 +47,7 @@ int main() {
                     printf("%s\n", listaproductos[i].descripcion);
                     printf("%d\n", listaproductos[i].stock);
                     printf("%.2f\n", listaproductos[i].precio);
-                    printf("el num de articulo es %d\n", listaproductos[i].numarticulo);
+                    printf("El num de articulo es %d\n", listaproductos[i].numarticulo);
                     printf("%d\n", listaproductos[i].lleno);
                 }
                 break;
@@ -109,28 +97,47 @@ void albaranes(struct productos listaproductos[15]) {
 
 void factura(struct productos listaproductos[15], struct productos produtosiniciales[15], int *numalbaranes) {
     int sin_pedidos = 0, cantidad;
-    float preciototal = 0;
+    float preciototal = 0, importe;
 
     for (int i = 0; i < 15; ++i) {
         if (listaproductos[i].stock == produtosiniciales[i].stock) sin_pedidos++;
     }
     if (sin_pedidos == 15) {
         printf("No hay albaranes. Para mostrar la factura introduce uno primero.\n");
+        return;
     }
-}
 
+    printf("----------------------------------------------------------------\n");
+    printf("\t\tFactura -- Ferreteria Albacete --\n");
+    printf("----------------------------------------------------------------\n");
+    printf("\t Descripcion \t Cantidad \t Precio  Importe\n");
+    for (int i = 0; i < 15; ++i) {
+        if (listaproductos[i].stock != produtosiniciales[i].stock) {
+            cantidad = produtosiniciales[i].stock - listaproductos[i].stock;
+            importe = listaproductos[i].precio * cantidad;
+            printf("%s \t        %d \t   %8.2f    %8.2f\n", listaproductos[i].descripcion, cantidad, listaproductos[i].precio, importe);
+            preciototal += importe;
+            produtosiniciales[i].stock = listaproductos[i].stock;
+        }
+    }
+    printf("----------------------------------------------------------------\n");
+    printf("                                      TOTAL:  %8.2f\n", preciototal);
+    printf("----------------------------------------------------------------\n");
+
+    *numalbaranes = 5;
+}
 
 void new_art(struct productos lista[LISTA])
 {
     int i, aux=0;
-    printf("Introduzca el nuevo articulo:\n");
+    printf("Introduzca el nuevo articulo.\n");
     for(i=0; i<LISTA && aux==0; i++) {
         if(lista[i].lleno==0) {
             printf("Introduce los datos requeridos:\n Descripcion:");
             fflush(stdin);
             fgets(lista[i].descripcion, MAX_DESC, stdin);
             fflush(stdin);
-            printf("cantidad:\n ");
+            printf("Cantidad:\n ");
             scanf("%d", &lista[i].stock);
             printf("Precio:\n ");
             scanf("%f", &lista[i].precio);
@@ -139,11 +146,5 @@ void new_art(struct productos lista[LISTA])
             break;
         } else if (lista[LISTA-1].lleno == 1)
             printf("No hay espacio disponible");
-    }
-}
-
-void listalimpia() {
-    for (int i = 0; i <LISTA; ++i) {
-        l_items[i].lleno = 0;
     }
 }
