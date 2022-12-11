@@ -20,7 +20,7 @@ struct productos{
 };
 void albaranes(struct productos listaproductos[15]);
 void factura(struct productos listaproductos[15], struct productos productosiniciales[15], int *numalbaranes);
-void new_art(struct productos lista[LISTA]);
+void new_art(struct productos lista[LISTA], struct productos mcpy[LISTA]);
 void cambio(char palabra[MAX_DESC]);
 
 int main() {
@@ -38,7 +38,7 @@ int main() {
         printf("Elija una opcion:\n");
         scanf("%d", &ops);
 
-        switch(ops) { //Menu
+        switch(ops) {
             case 1:
                 printf("1. Introduccion de albaran\n");
                 if (numalbaranes > 0) {
@@ -52,9 +52,9 @@ int main() {
                 break;
             case 3:
                 printf("3. Introduccion de nuevo articulo\n");
-                new_art(listaproductos);
+                new_art(listaproductos, productosiniciales);
                 for(int i=0;i<LISTA;i++) {
-                    printf("\nDescripcion: %s\n", listaproductos[i].descripcion);
+                    printf("Descripcion: %s\n", productosiniciales[i].descripcion);
                     printf("Stock: %d\n", listaproductos[i].stock);
                     printf("Precio: %.2f\n", listaproductos[i].precio);
                     printf("El numero del articulo es %d\n", listaproductos[i].numarticulo);
@@ -110,12 +110,12 @@ void albaranes(struct productos listaproductos[15]) {
     printf("Importe total del albaran: %.2f\n", totalalbaran);
 }
 
-void factura(struct productos listaproductos[15], struct productos productosiniciales[15], int *numalbaranes) {
+void factura(struct productos listaproductos[15], struct productos produtosiniciales[15], int *numalbaranes) {
     int sin_pedidos = 0, cantidad;
     float preciototal = 0, importe;
 
     for (int i = 0; i < 15; ++i) {
-        if (listaproductos[i].stock == productosiniciales[i].stock) sin_pedidos++;
+        if (listaproductos[i].stock == produtosiniciales[i].stock) sin_pedidos++;
     }
     if (sin_pedidos == 15) {
         printf("No hay albaranes. Para mostrar la factura introduce uno primero.\n");
@@ -127,12 +127,12 @@ void factura(struct productos listaproductos[15], struct productos productosinic
     printf("----------------------------------------------------------------\n");
     printf("\t Descripcion \t Cantidad \t Precio  Importe\n");
     for (int i = 0; i < 15; ++i) {
-        if (listaproductos[i].stock != productosiniciales[i].stock) { //Mediante esta sentencia hacemos que solo vayan a la factura los articulos cuyo stock se haya visto modificado
-            cantidad = productosiniciales[i].stock - listaproductos[i].stock; //Calculamos la cantidad pedida restando al stock inicial el actual (despues de hacer albaranes)
+        if (listaproductos[i].stock != produtosiniciales[i].stock) {//Mediante esta sentencia hacemos que solo vayan a la factura los articulos cuyo stock se haya visto modificado
+            cantidad = produtosiniciales[i].stock - listaproductos[i].stock; //Calculamos la cantidad pedida restando al stock inicial el actual (despues de hacer albaranes)
             importe = listaproductos[i].precio * cantidad; //Calculamos el importe a pagar multiplicando el precio de los articulos pedidos por su cantidad
             printf("%s \t        %d \t   %.2f    %.2f\n", listaproductos[i].descripcion, cantidad, listaproductos[i].precio, importe); //Vamos imprimiendo todos los datos de cada articulo
             preciototal += importe; //Vamos calculando el precio total uno por uno segun van pasando los articulos y sumando el importe de cada uno de estos
-            productosiniciales[i].stock = listaproductos[i].stock; //Despues de pasar cada articulo a la factura reiniciamos el stock de estos
+            produtosiniciales[i].stock = listaproductos[i].stock; //Despues de pasar cada articulo a la factura reiniciamos el stock de estos
         }
     }
     printf("----------------------------------------------------------------\n");
@@ -142,13 +142,13 @@ void factura(struct productos listaproductos[15], struct productos productosinic
     *numalbaranes = 5; //Reiniciamos tambien a 5 el numero de albaranes que se pueden pedir despues de hacer la factura
 }
 
-void new_art(struct productos lista[LISTA]) {
+void new_art(struct productos lista[LISTA], struct productos mcpy[LISTA])
+{
     int i, aux=0;
-
-    printf("Introduzca el nuevo articulo.\n");
-    for(i=0; i<LISTA && aux==0; i++) { //Con el for recorremos la lista de productos
-        if(lista[i].lleno==0) { //Si encuentra un hueco vacio (lleno = 0) pide los datos del nuevo objeto y lo guarda en la lista
+    for(i=0; i<LISTA && aux==0; i++) {
+        if(lista[i].lleno==0) {
             printf("Introduce los datos requeridos:\n Descripcion:");
+            lista[i].numarticulo=i+1;
             fflush(stdin);
             fgets(lista[i].descripcion, MAX_DESC, stdin);
             cambio(lista[i].descripcion);
@@ -157,13 +157,19 @@ void new_art(struct productos lista[LISTA]) {
             scanf("%f", &lista[i].precio);
             printf("Stock:\n ");
             scanf("%d", &lista[i].stock);
-            lista[i].numarticulo = i+1;
             lista[i].lleno = 1;
+            mcpy[i].numarticulo=lista[i].numarticulo;
+            strcpy(mcpy[i].descripcion,lista[i].descripcion);
+            mcpy[i].precio=lista[i].precio;
+            mcpy[i].stock=lista[i].stock;
+            mcpy[i].lleno=1;
+            aux=1;
             break;
         } else if (lista[14].lleno == 1) { //Si no encuentra huecos vacios imprime un mensaje de error
             printf("No hay espacio disponible\n");
             break;
         }
+
     }
 }
 
