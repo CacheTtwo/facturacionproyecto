@@ -18,7 +18,6 @@ struct productos{
     int stock;
     int lleno;
 };
-
 void albaranes(struct productos listaproductos[15]);
 void factura(struct productos listaproductos[15], struct productos productosiniciales[15], int *numalbaranes);
 void new_art(struct productos lista[LISTA], struct productos mcpy[LISTA]);
@@ -56,8 +55,8 @@ int main() {
                 new_art(listaproductos, productosiniciales);
                 for(int i=0;i<LISTA;i++) {
                     printf("Descripcion: %s\n", productosiniciales[i].descripcion);
-                    printf("Precio: %.2f\n", listaproductos[i].precio);
                     printf("Stock: %d\n", listaproductos[i].stock);
+                    printf("Precio: %.2f\n", listaproductos[i].precio);
                     printf("El numero del articulo es %d\n", listaproductos[i].numarticulo);
                     printf("Lleno: %d\n", listaproductos[i].lleno);
                 }
@@ -123,27 +122,48 @@ void factura(struct productos listaproductos[15], struct productos productosinic
         return;
     } //Mediante el for y el if comprobamos si todavia no se ha introducido ningun albaran, en ese caso pedimos que se introduzca uno antes de mostrar una factura
 
-    printf("----------------------------------------------------------------\n"); //Empezamos a imprimir la factura
-    printf("\t\tFactura -- Ferreteria Albacete --\n");
-    printf("----------------------------------------------------------------\n");
-    printf("\t Descripcion \t Cantidad \t Precio  Importe\n");
+    printf("+");
+    for(int i=0;i<=86;i++)
+    {
+        printf("-");
+    }
+    printf("+\n"); //Empezamos a imprimir la factura
+    printf("|\t\tFactura -- Ferreteria Albacete --\t\t\t\t        |\n");
+    printf("+");
+    for(int i=0;i<=86;i++)
+    {
+        printf("-");
+    }
+    printf("+\n");
+    printf("|\t \tDescripcion \t\t\t\tCantidad    Precio    Importe   |\n");
     for (int i = 0; i < 15; ++i) {
         if (listaproductos[i].stock != productosiniciales[i].stock) {//Mediante esta sentencia hacemos que solo vayan a la factura los articulos cuyo stock se haya visto modificado
             cantidad = productosiniciales[i].stock - listaproductos[i].stock; //Calculamos la cantidad pedida restando al stock inicial el actual (despues de hacer albaranes)
             importe = listaproductos[i].precio * cantidad; //Calculamos el importe a pagar multiplicando el precio de los articulos pedidos por su cantidad
-            printf("%s \t        %d \t   %.2f    %.2f\n", listaproductos[i].descripcion, cantidad, listaproductos[i].precio, importe); //Vamos imprimiendo todos los datos de cada articulo
+            printf("|%-48s \t  %2d \t   %6.2f     %2.2f\t%-6s\n", listaproductos[i].descripcion, cantidad, listaproductos[i].precio, importe,"|"); //Vamos imprimiendo todos los datos de cada articulo
             preciototal += importe; //Vamos calculando el precio total uno por uno segun van pasando los articulos y sumando el importe de cada uno de estos
             productosiniciales[i].stock = listaproductos[i].stock; //Despues de pasar cada articulo a la factura reiniciamos el stock de estos
         }
     }
-    printf("----------------------------------------------------------------\n");
-    printf("                                           TOTAL:  %.2f\n", preciototal);
-    printf("----------------------------------------------------------------\n"); //Terminamos de imprimir la factura
+    printf("+");
+    for(int i=0;i<=86;i++)
+    {
+        printf("-");
+    }
+    printf("+\n");
+    printf("|\t\t\t\t\t           TOTAL:  %.2f \t%17s\n", preciototal," |");
+    printf("+");
+    for(int i=0;i<=86;i++)
+    {
+        printf("-");
+    }
+    printf("+\n"); //Terminamos de imprimir la factura
 
     *numalbaranes = 5; //Reiniciamos tambien a 5 el numero de albaranes que se pueden pedir despues de hacer la factura
 }
 
-void new_art(struct productos lista[LISTA], struct productos mcpy[LISTA]) {
+void new_art(struct productos lista[LISTA], struct productos mcpy[LISTA])
+{
     int i, aux=0;
     for(i=0; i<LISTA && aux==0; i++) { //Con el for recorremos la lista de productos
         if(lista[i].lleno==0) { //Si encuentra un hueco vacio (lleno = 0) pide los datos del nuevo objeto y lo guarda en la lista
